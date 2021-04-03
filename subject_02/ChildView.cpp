@@ -186,7 +186,8 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 	}
 
 	if (index > 3) {
-		index = 0;
+		index	 = 0;
+		location = 0;
 	}
 
 	CWnd::OnTimer(nIDEvent);
