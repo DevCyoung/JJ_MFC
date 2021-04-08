@@ -1,15 +1,8 @@
 ﻿// ChildView.cpp: CChildView 클래스의 구현
-//
-
 #include "pch.h"
 #include "framework.h"
 #include "Bitmaps.h"
 #include "ChildView.h"
-#include <iostream>
-#include <math.h>
-#include <string>
-using namespace std;
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,18 +14,12 @@ BITMAP bmpinfo;
 // CChildView
 CChildView::CChildView()
 {
-
 	bitmap.LoadBitmap(IDB_BITMAP1);
 	bitmap.GetBitmap(&bmpinfo);
 
-	ch_pos.x = inter * 10  - bmpinfo.bmWidth  / 2;   // 중앙 정렬 - bmpinfo.bmWidth / 2
-	ch_pos.y = inter * 6   - bmpinfo.bmHeight / 2;  // 중앙 정렬 - bmpinfo.bmHeight / 2
-
-
+	ch_pos.x = inter * 10  - bmpinfo.bmWidth  / 2;   // 중앙 정렬  - bmpinfo.bmWidth  / 2
+	ch_pos.y = inter * 6   - bmpinfo.bmHeight / 2;   // 중앙 정렬  - bmpinfo.bmHeight / 2
 }
-
-
-
 
 CChildView::~CChildView()
 {
@@ -42,10 +29,10 @@ CChildView::~CChildView()
 BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_PAINT()
 	ON_WM_TIMER()  
+	ON_WM_KEYDOWN()
 	ON_WM_DESTROY()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDOWN()
-	ON_WM_KEYDOWN()
 END_MESSAGE_MAP()
 
 // CChildView 메시지 처리기
@@ -53,7 +40,6 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 {
 	if (!CWnd::PreCreateWindow(cs))
 		return FALSE;
-
 	cs.dwExStyle |= WS_EX_CLIENTEDGE;
 	cs.style &= ~WS_BORDER;
 	cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS,
@@ -63,8 +49,6 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 	return TRUE;
 }
 
-
-
 void CChildView::OnPaint()
 {
 	CPaintDC dc(this);
@@ -72,7 +56,7 @@ void CChildView::OnPaint()
 	//VIEW GRID
 	if (SCREEN_STATE & GRID)				
 	{
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 30; i++) {
 
 			dc.MoveTo(i * inter, 0);
 			dc.LineTo(i * inter, 2000);
@@ -111,7 +95,6 @@ void CChildView::OnPaint()
 	dc.TextOut(inter * 25 , inter * 1 , msg, lstrlen(msg));
 	msg = _T("마우스 : L정지 / R시작");
 	dc.TextOut(inter * 25 , inter * 2, msg, lstrlen(msg));
-
 }
 
 // <summary>
@@ -120,7 +103,6 @@ void CChildView::OnPaint()
 // </summary>
 void CChildView::OnTimer(UINT_PTR nIDEvent)
 {
-	
 	Invalidate();
 
 	//CHECK PLAY
@@ -156,6 +138,7 @@ void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 	{
 		SCREEN_STATE ^= PLAY;
 	}
+
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
@@ -186,7 +169,6 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 
 void CChildView::OnDestroy()
 {
-
 	KillTimer(1);
 	CWnd::OnDestroy();
 }
