@@ -25,7 +25,7 @@ CChildView::CChildView()
 	bitmap.LoadBitmap(IDB_BITMAP1);
 	bitmap.GetBitmap(&bmpinfo);
 
-	ch_pos.x = inter * 10  - bmpinfo.bmWidth / 2;   // 중앙 정렬 - bmpinfo.bmWidth / 2
+	ch_pos.x = inter * 10  - bmpinfo.bmWidth  / 2;   // 중앙 정렬 - bmpinfo.bmWidth / 2
 	ch_pos.y = inter * 6   - bmpinfo.bmHeight / 2;  // 중앙 정렬 - bmpinfo.bmHeight / 2
 
 
@@ -68,7 +68,7 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 void CChildView::OnPaint()
 {
 	CPaintDC dc(this);
-
+	SetTimer(1, frame_speed, NULL);
 	//VIEW GRID
 	if (SCREEN_STATE & GRID)				
 	{
@@ -169,7 +169,6 @@ void CChildView::OnRButtonDown(UINT nFlags, CPoint point)
 // 테스트중
 void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-	int tempt = frame_speed;
 	switch (nChar)
 	{
 	// ON GRID , OFF RGID
@@ -178,7 +177,6 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		break;
 	// START
 	case VK_CONTROL:
-		SetTimer(1, frame_speed, NULL);
 	default:
 		break;
 	}
