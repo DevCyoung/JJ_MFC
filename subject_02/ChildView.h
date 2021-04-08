@@ -17,6 +17,35 @@ public:
 // 특성입니다.
 public:
 
+	//CHARACTOR POSITION
+	struct Vector {
+	public:
+		int x = 0;
+		int y = 0;
+	};
+
+	int moveScale = 0;
+	int dir_index = 0;
+
+	int inter = 50;
+	int frame_speed = 25;
+
+	int SCREEN_STATE = 0X00000003;
+	int PLAY		 = 0X00000001;
+	int GRID		 = 0X00000002;
+
+	int direction[4][2] =
+	{
+		{  4 ,-3 },
+		{  4, 3 },
+		{ -4, 3 },
+		{ -4, -3 }
+	};
+
+	Vector ch_pos;
+
+
+
 // 작업입니다.
 public:
 
