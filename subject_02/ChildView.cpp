@@ -17,8 +17,9 @@ CChildView::CChildView()
 	bitmap.LoadBitmap(IDB_BITMAP1);
 	bitmap.GetBitmap(&bmpinfo);
 
-	ch_pos.x = inter * 10  - bmpinfo.bmWidth  / 2;   // 중앙 정렬  - bmpinfo.bmWidth  / 2
-	ch_pos.y = inter * 6   - bmpinfo.bmHeight / 2;   // 중앙 정렬  - bmpinfo.bmHeight / 2
+	//Position Init
+	ch_pos.x = INTER * 10  - bmpinfo.bmWidth  / 2;   // 중앙 정렬  - bmpinfo.bmWidth  / 2
+	ch_pos.y = INTER * 6   - bmpinfo.bmHeight / 2;   // 중앙 정렬  - bmpinfo.bmHeight / 2
 }
 
 CChildView::~CChildView()
@@ -52,30 +53,30 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 void CChildView::OnPaint()
 {
 	CPaintDC dc(this);
-	SetTimer(1, frame_speed, NULL);
-	//VIEW GRID
+	SetTimer(1, FRAME_SPEED, NULL);
+	//GRID
 	if (SCREEN_STATE & GRID)				
 	{
 		for (int i = 0; i < 30; i++) {
 
-			dc.MoveTo(i * inter, 0);
-			dc.LineTo(i * inter, 2000);
+			dc.MoveTo(i * INTER, 0);
+			dc.LineTo(i * INTER, 2000);
 
-			dc.MoveTo(0,	i * inter);
-			dc.LineTo(2000, i * inter);
+			dc.MoveTo(0,	i * INTER);
+			dc.LineTo(2000, i * INTER);
 		}
 	}
 
 	//DRAW RHOMBUS
-	dc.MoveTo(inter * 14, inter * 3);
-	dc.LineTo(inter * 10, inter * 6);
-	dc.MoveTo(inter * 14, inter * 3);
-	dc.LineTo(inter * 18, inter * 6);
+	dc.MoveTo(INTER * 14, INTER * 3);
+	dc.LineTo(INTER * 10, INTER * 6);
+	dc.MoveTo(INTER * 14, INTER * 3);
+	dc.LineTo(INTER * 18, INTER * 6);
 
-	dc.MoveTo(inter * 14, inter * 9);
-	dc.LineTo(inter * 10, inter * 6);
-	dc.MoveTo(inter * 14, inter * 9);
-	dc.LineTo(inter * 18, inter * 6);
+	dc.MoveTo(INTER * 14, INTER * 9);
+	dc.LineTo(INTER * 10, INTER * 6);
+	dc.MoveTo(INTER * 14, INTER * 9);
+	dc.LineTo(INTER * 18, INTER * 6);
 
 	CDC dcmem;
 	dcmem.CreateCompatibleDC(&dc);
@@ -87,14 +88,14 @@ void CChildView::OnPaint()
 	//PAUSE
 	if ( (SCREEN_STATE & PLAY) == 0) {
 		const TCHAR* msg = _T("PAUSE");
-		dc.TextOut(inter * 14 - inter / 2, inter * 6 - inter / 2, msg, lstrlen(msg));
+		dc.TextOut(INTER * 14 - INTER / 2, INTER * 6 - INTER / 2, msg, lstrlen(msg));
 	}
 
 	//DRAW TEXT
 	const TCHAR* msg = _T("스페이스바 : 그리드");
-	dc.TextOut(inter * 25 , inter * 1 , msg, lstrlen(msg));
+	dc.TextOut(INTER * 25 , INTER * 1 , msg, lstrlen(msg));
 	msg = _T("마우스 : L정지 / R시작");
-	dc.TextOut(inter * 25 , inter * 2, msg, lstrlen(msg));
+	dc.TextOut(INTER * 25 , INTER * 2, msg, lstrlen(msg));
 }
 
 // <summary>
@@ -106,60 +107,58 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 	Invalidate();
 
 	//CHECK PLAY
-	if ( (SCREEN_STATE & PLAY) == 0 )
+	if ( SCREEN_STATE & PLAY  )
 	{
-		return;
-	}
 
-	//MOVE CHARACTOR
-	ch_pos.x += direction[dir_index][0];
-	ch_pos.y += direction[dir_index][1];
+		//MOVE 
+		ch_pos.x += DIRECTION[dirIndex][0];
+		ch_pos.y += DIRECTION[dirIndex][1];
 
-	//MOVE_SIZE
-	moveScale += 4;
+		//MOVE SCALE
+		moveScale += 4;
 
-	//SWITCH MOVEDIR
-	if (moveScale % 200 == 0) {
-		++dir_index;
-	}
+		//SWITCH DIR
+		if (moveScale % 200 == 0) {
+			++dirIndex;
+		}
 
-	if (dir_index > 3) {
-		dir_index	 = 0;
-		moveScale = 0;
+		if (dirIndex > 3) {
+			dirIndex = 0;
+			moveScale = 0;
+		}
+		
 	}
 
 	CWnd::OnTimer(nIDEvent);
 }
 
-// 왼쪽 버튼을 누르면 STOP
+//STOP
 void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
 {
 	if (SCREEN_STATE & PLAY)
-	{
 		SCREEN_STATE ^= PLAY;
-	}
+	
 
 	CWnd::OnLButtonDown(nFlags, point);
 }
 
-// 오른쪽 버튼을 누르면 PLAY
+//PLAY
 void CChildView::OnRButtonDown(UINT nFlags, CPoint point)
 {
 	SCREEN_STATE |= PLAY;
 	CWnd::OnRButtonDown(nFlags, point);
 }
 
-// 테스트중
+
+	// ON GRID , OFF RGID
 void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
 	switch (nChar)
 	{
-	// ON GRID , OFF RGID
 	case VK_SPACE:
 		SCREEN_STATE ^= GRID;
 		break;
-	// START
-	case VK_CONTROL:
+	
 	default:
 		break;
 	}

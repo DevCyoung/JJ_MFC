@@ -14,16 +14,16 @@ public:
 	//CHARACTOR POSITION
 	struct Vector {
 	public:
-		int x = 0;
-		int y = 0;
+		int x					= 0;
+		int y					= 0;
 	};
 
-	const int inter = 50;
-	const int frame_speed = 25;
-	const int PLAY		 = 0X00000001;
-	const int GRID		 = 0X00000002;
+	const int PLAY				= 0X00000001;
+	const int GRID				= 0X00000002;
+	const int INTER				= 50;
+	const int FRAME_SPEED		= 25;
 
-	const int direction[4][2] =
+	const int DIRECTION[4][2]	=
 	{
 		{  4 ,-3 },
 		{  4,  3 },
@@ -31,10 +31,10 @@ public:
 		{ -4, -3 }
 	};
 
-	int SCREEN_STATE = 0X00000003;	//On Play , On GRID
+	int SCREEN_STATE			= PLAY | GRID;	
 
-	int dir_index = 0;
-	int moveScale = 0;
+	int dirIndex				= 0;
+	int moveScale				= 0;
 
 	Vector ch_pos;
 
