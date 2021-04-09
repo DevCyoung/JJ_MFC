@@ -20,6 +20,7 @@ public:
 
 	const int PLAY				= 0X00000001;
 	const int GRID				= 0X00000002;
+	const int RHOMBUS			= 0X00000004;
 	const int INTER				= 50;
 	const int FRAME_SPEED		= 25;
 
@@ -31,7 +32,7 @@ public:
 		{ -4, -3 }
 	};
 
-	int SCREEN_STATE			= PLAY | GRID;	
+	int SCREEN_STATE			= PLAY | GRID | RHOMBUS;
 
 	int dirIndex				= 0;
 	int moveScale				= 0;
@@ -61,5 +62,6 @@ public:
 	afx_msg void OnRButtonDown(UINT nFlags, CPoint point);
 	afx_msg void OnInitMenu(CMenu* pMenu);
 	afx_msg void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags);
+	afx_msg void OnMButtonDown(UINT nFlags, CPoint point);
 };
 

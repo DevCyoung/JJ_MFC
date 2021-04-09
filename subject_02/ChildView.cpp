@@ -34,6 +34,7 @@ BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_DESTROY()
 	ON_WM_LBUTTONDOWN()
 	ON_WM_RBUTTONDOWN()
+	ON_WM_MBUTTONDOWN()
 END_MESSAGE_MAP()
 
 // CChildView 메시지 처리기
@@ -53,30 +54,35 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
 void CChildView::OnPaint()
 {
 	CPaintDC dc(this);
+
 	SetTimer(1, FRAME_SPEED, NULL);
+
 	//GRID
 	if (SCREEN_STATE & GRID)				
 	{
 		for (int i = 0; i < 30; i++) {
 
-			dc.MoveTo(i * INTER, 0);
-			dc.LineTo(i * INTER, 2000);
+			dc.MoveTo(i	* INTER, 0);
+			dc.LineTo(i	* INTER, 2000);
 
-			dc.MoveTo(0,	i * INTER);
+			dc.MoveTo(0	  , i * INTER);
 			dc.LineTo(2000, i * INTER);
 		}
 	}
 
 	//DRAW RHOMBUS
-	dc.MoveTo(INTER * 14, INTER * 3);
-	dc.LineTo(INTER * 10, INTER * 6);
-	dc.MoveTo(INTER * 14, INTER * 3);
-	dc.LineTo(INTER * 18, INTER * 6);
+	if (SCREEN_STATE & RHOMBUS)
+	{
+		dc.MoveTo(INTER * 14, INTER * 3);
+		dc.LineTo(INTER * 10, INTER * 6);
+		dc.MoveTo(INTER * 14, INTER * 3);
+		dc.LineTo(INTER * 18, INTER * 6);
 
-	dc.MoveTo(INTER * 14, INTER * 9);
-	dc.LineTo(INTER * 10, INTER * 6);
-	dc.MoveTo(INTER * 14, INTER * 9);
-	dc.LineTo(INTER * 18, INTER * 6);
+		dc.MoveTo(INTER * 14, INTER * 9);
+		dc.LineTo(INTER * 10, INTER * 6);
+		dc.MoveTo(INTER * 14, INTER * 9);
+		dc.LineTo(INTER * 18, INTER * 6);
+	}
 
 	CDC dcmem;
 	dcmem.CreateCompatibleDC(&dc);
@@ -93,9 +99,11 @@ void CChildView::OnPaint()
 
 	//DRAW TEXT
 	const TCHAR* msg = _T("스페이스바 : 그리드");
-	dc.TextOut(INTER * 25 , INTER * 1 , msg, lstrlen(msg));
+	dc.TextOut(INTER * 25 , INTER * 1, msg, lstrlen(msg));
 	msg = _T("마우스 : L정지 / R시작");
 	dc.TextOut(INTER * 25 , INTER * 2, msg, lstrlen(msg));
+	msg = _T("마우스휠 : RHOMBUS");
+	dc.TextOut(INTER * 25,  INTER * 3, msg, lstrlen(msg));
 }
 
 // <summary>
@@ -150,6 +158,8 @@ void CChildView::OnRButtonDown(UINT nFlags, CPoint point)
 }
 
 
+
+
 	// ON GRID , OFF RGID
 void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
@@ -158,7 +168,6 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 	case VK_SPACE:
 		SCREEN_STATE ^= GRID;
 		break;
-	
 	default:
 		break;
 	}
@@ -170,4 +179,11 @@ void CChildView::OnDestroy()
 {
 	KillTimer(1);
 	CWnd::OnDestroy();
+}
+
+//RHOMBUS
+void CChildView::OnMButtonDown(UINT nFlags, CPoint point)
+{
+	SCREEN_STATE ^= RHOMBUS;
+	CWnd::OnMButtonDown(nFlags, point);
 }
