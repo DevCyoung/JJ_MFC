@@ -130,6 +130,7 @@ void CChildView::OnTimer(UINT_PTR nIDEvent)
 			++dirIndex;
 		}
 
+
 		if (dirIndex > 3) {
 			dirIndex = 0;
 			moveScale = 0;
