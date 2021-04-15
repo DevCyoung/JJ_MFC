@@ -1,7 +1,6 @@
 ﻿
 // ChildView.cpp: CChildView 클래스의 구현
 //
-
 #include "pch.h"
 #include "framework.h"
 #include "InputKeyStroke.h"
@@ -11,9 +10,7 @@
 #define new DEBUG_NEW
 #endif
 
-
 // CChildView
-
 CChildView::CChildView()
 {
 	m_xPos = m_yPos = 60; // 임의 값으로 초기화
@@ -65,6 +62,7 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 
 void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
+
 	switch (nChar) {
 	case VK_LEFT:
 		m_xPos -= 20;
@@ -82,8 +80,9 @@ void CChildView::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 		m_bFill = !m_bFill;
 	}
 	// 20 <= m_xPos <= m_xMax-20
-	m_xPos = min(max(20, m_xPos), m_xMax - 20);
+	m_xPos = min( max(20, m_xPos), m_xMax - 20);
 	// 20 <= m_yPos <= m_yMax-20
-	m_yPos = min(max(20, m_yPos), m_yMax - 20);
+	m_yPos = min( max(20, m_yPos), m_yMax - 20);
 	Invalidate();
+
 }
