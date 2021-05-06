@@ -13,12 +13,38 @@
 
 #define RED 1
 #define BLUE 2
-
+#define SIZE 10
 // CChildView
 
 CChildView::CChildView()
 {
-	figures[0].Initialize(180, 180, RED , 50);
+
+	const int XPOS = 600;
+	
+	int radius = 30;
+	int x = XPOS;
+	int y = 100;
+
+	for (int i = 0; i < SIZE; i++)
+	{
+		if (i % 2 == 0) 
+		{
+			y += 80;
+			x = XPOS;
+		}
+		
+		figures[i].Initialize(x, y, radius);
+		rgns[i].CreateEllipticRgn(x - radius, y - radius, x + radius, y + radius);
+
+		x += 80 ;
+
+	}
+
+	
+
+
+
+	
 }
 
 CChildView::~CChildView()
@@ -28,6 +54,11 @@ CChildView::~CChildView()
 
 BEGIN_MESSAGE_MAP(CChildView, CWnd)
 	ON_WM_PAINT()
+//	ON_WM_TIMER()
+ON_WM_LBUTTONDOWN()
+ON_WM_LBUTTONUP()
+ON_WM_MOUSEMOVE()
+ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 
@@ -52,10 +83,94 @@ void CChildView::OnPaint()
 	CPaintDC dc(this); // 그리기를 위한 디바이스 컨텍스트입니다.
 	
 	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
-
-	figures[0].Draw(&dc);
+	SetTimer(0, 60, NULL);
+	
+	for (int i = 0; i < SIZE; i++)
+	{
+		figures[i].Draw(&dc);
+	}
+	
 
 	
 	// 그리기 메시지에 대해서는 CWnd::OnPaint()를 호출하지 마십시오.
 }
 
+
+
+//void CChildView::OnTimer(UINT_PTR nIDEvent)
+//{
+//
+//
+//	CWnd::OnTimer(nIDEvent);
+//}
+
+
+void CChildView::OnLButtonDown(UINT nFlags, CPoint point)
+{
+	CPoint pt;
+	::GetCursorPos(&pt);
+	ScreenToClient(&pt);
+
+	for (int i = 0; i < SIZE; i++)
+	{
+		if (rgns[i].PtInRegion(pt))
+		{
+			figures[i].checked = true;
+			break;
+		}
+	}
+
+	CWnd::OnLButtonDown(nFlags, point);
+
+}
+
+
+void CChildView::OnLButtonUp(UINT nFlags, CPoint point)
+{
+	for (int i = 0; i < SIZE; i++)
+	{
+		if (figures[i].checked)
+		{
+			figures[i].checked = false;
+			int x = figures[i].x;
+			int y = figures[i].y;
+			int radius = figures[i].radius;
+			rgns[i].SetRectRgn(x - radius, y - radius, x + radius, y + radius);
+			break;
+		}
+
+	}
+
+	CWnd::OnLButtonUp(nFlags, point);
+}
+
+
+void CChildView::OnMouseMove(UINT nFlags, CPoint point)
+{
+	
+	CPoint pt;
+	::GetCursorPos(&pt);
+	ScreenToClient(&pt);
+
+	for (int i = 0; i < 10; i++)
+	{
+		if (figures[i].checked)
+		{
+			figures[i].SetPos(pt.x , pt.y);
+		}
+
+	}
+
+	
+	
+
+	CWnd::OnMouseMove(nFlags, point);
+}
+
+
+void CChildView::OnTimer(UINT_PTR nIDEvent)
+{
+	Invalidate();
+
+	CWnd::OnTimer(nIDEvent);
+}

@@ -3,6 +3,8 @@
 
 // CFigureObject
 
+#include "FigureMove.h"
+#include "time.h"
 
 class Figure : public CWnd
 {
@@ -10,20 +12,38 @@ class Figure : public CWnd
 
 	// µµÇüÀÇº¯¼ö
 public:
-	int x;
-	int y;
-	int radius;
-	int color;
+	int x = 0;
+	int y =0;
+	int radius = 0;
+	int color = 1;
+	bool checked = false;
 	CRgn rgn;
 
 public:
 	void Initialize(int _x, int _y, int color , int _radius)
 	{
 		SetPos(_x, _y);
-		SetCRgn();
-		SetColor(color);
 		radius = _radius;
+		SetColor(color);
+		checked = false;
 	}
+	void Initialize(int _x, int _y , int _radius)
+	{
+		SetPos(_x, _y);
+		radius = _radius;
+		checked = false;
+
+		
+
+		if (RED == rand() % 2) 
+		{
+			SetColor(RED);
+		}
+		else
+			SetColor(BLUE);
+
+	}
+	
 
 private:
 	void SetColor(int _color)
@@ -38,31 +58,54 @@ public:
 		x = _x;
 		y = _y;
 	}
-	void SetCRgn()
+	void SetCRgn(CPaintDC dc)
 	{
-		rgn.CreateEllipticRgn(x - radius, y - radius, x + radius, y + radius);
+		
+		
+
 	}
 	void Draw(CPaintDC* pdc)
 	{
+
+		CBrush brush;
+		
 		switch (color)
 		{
-		case 1:
-			pdc->SetDCBrushColor(RGB(255, 0, 0));		//»¡°­
+		case RED:
+			brush.CreateSolidBrush(RGB(255, 0, 0));		//»¡°­
 			break;
-		case 2:
-			pdc->SetDCBrushColor(RGB(0, 0, 255));		//ÆÄ¶û
+		case BLUE:
+			brush.CreateSolidBrush(RGB(0, 0, 255));		//ÆÄ¶û
+			break;
 		default:
+			brush.CreateSolidBrush(RGB(255, 0, 0));
 			break;
 		}
 
+		
+		pdc->SelectObject(brush);
+
 		pdc->Ellipse(x - radius, y - radius, x + radius, y + radius);
+
 	}
 	bool GetChecked()
 	{
 		CPoint point;
 		::GetCursorPos(&point);
 		ScreenToClient(&point);
-		return rgn.PtInRegion(point);
+		
+		/*checked = rgn.PtInRegion(point);*/
+		return checked;
+	}
+
+	void Move()
+	{
+		CPoint point;
+		::GetCursorPos(&point);
+		ScreenToClient(&point);
+
+		SetPos(point.x, point.y);
+		
 	}
 
 

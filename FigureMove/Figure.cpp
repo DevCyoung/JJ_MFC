@@ -4,7 +4,7 @@
 #include "pch.h"
 #include "FigureMove.h"
 #include "Figure.h"
-
+#include "time.h"
 
 // Figure
 
@@ -12,6 +12,9 @@ IMPLEMENT_DYNAMIC(Figure, CWnd)
 
 Figure::Figure()
 {
+
+	srand((unsigned int)time(NULL));
+
 
 }
 
