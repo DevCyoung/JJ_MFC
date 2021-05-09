@@ -11,15 +11,48 @@
 
 class CChildView : public CWnd
 {
+
 // 생성입니다.
 public:
+
 	CChildView();
 
+	bool show;
+
+	int count;
+	
 	Figure figures[10];
 	CRgn	rgns[10];
 
-// 특성입니다.
+
+	Figure redBox;
+	CRgn	redRgn;
+	Figure blueBox;
+	CRgn	blueRgn;
+	
+	int curIndex;
+	
+
 public:
+	// 모든공이 알맞은 상자에 들어갔는지 체크합니다.
+	bool GameFinish()
+	{
+
+		for (int i = 0; i < count; i++)
+		{
+			if (figures[i].good == false)
+				return false;
+		}
+		return true;
+
+	}
+
+
+	
+
+
+	
+
 	
 
 // 작업입니다.
@@ -43,5 +76,9 @@ public:
 	afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
 	afx_msg void OnMouseMove(UINT nFlags, CPoint point);
 	afx_msg void OnTimer(UINT_PTR nIDEvent);
+
+	afx_msg void OnLoadCalculator();
+	afx_msg void OnLoadGame();
+	afx_msg void OnLoadWep();
 };
 
